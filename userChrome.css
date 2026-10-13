@@ -1,0 +1,8 @@
+/* ==========================================================================
+   Zen Browser Custom Modifications
+   Profile: Zen Twilight
+   Location: /Users/lasse/Sites/zen-mods/userChrome.css
+   ========================================================================== */
+
+/* --- Zen Loading Bar (Mobile-style top indicator + tab progress fill) --- */
+@import url("ZenLoadingBar.css");
