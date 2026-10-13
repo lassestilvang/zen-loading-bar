@@ -85,17 +85,17 @@ Firefox / Zen Sync syncs bookmarks, history, and extensions, but does **not** au
 
 With this repository, syncing to your other MacBook is seamless:
 
-1. **Push to a Git Remote** (e.g. GitHub private repo):
+1. **Push to a Git Remote** (e.g. GitHub):
    ```bash
    git add .
-   git commit -m "Add Zen Loading Bar mod"
-   git remote add origin git@github.com:<your-user>/zen-mods.git
+   git commit -m "feat: zen loading bar"
+   git remote add origin git@github.com:<your-user>/zen-loading-bar.git
    git push -u origin main
    ```
 2. **On your other MacBook**:
    ```bash
-   git clone git@github.com:<your-user>/zen-mods.git ~/Sites/zen-mods
-   cd ~/Sites/zen-mods
+   git clone git@github.com:<your-user>/zen-loading-bar.git ~/Sites/zen-loading-bar
+   cd ~/Sites/zen-loading-bar
    ./install.sh
    ```
 3. Restart Zen Browser (`Cmd+Q` and reopen).
