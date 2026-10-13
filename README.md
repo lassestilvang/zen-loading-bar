@@ -79,23 +79,29 @@ transition: width 0.5s ease-in-out, top 0.1s ease-in-out, background 0.2s ease !
 
 ---
 
-## 💻 Syncing to Your Other MacBook
+## 💻 Syncing to Other Computers (MacBook & Linux)
 
 Firefox / Zen Sync syncs bookmarks, history, and extensions, but does **not** automatically sync raw local `userChrome.css` profile files. 
 
-With this repository, syncing to your other MacBook is seamless:
+With this repository, syncing across multiple devices is seamless:
 
-1. **Push to a Git Remote** (e.g. GitHub):
+1. **Push your changes to GitHub**:
    ```bash
    git add .
-   git commit -m "feat: zen loading bar"
-   git remote add origin git@github.com:<your-user>/zen-loading-bar.git
-   git push -u origin main
+   git commit -m "feat: zen loading bar tweaks"
+   git push
    ```
-2. **On your other MacBook**:
+
+2. **On your other MacBook or Linux machine**:
    ```bash
-   git clone git@github.com:<your-user>/zen-loading-bar.git ~/Sites/zen-loading-bar
+   git clone git@github.com:lassestilvang/zen-loading-bar.git ~/Sites/zen-loading-bar
+   # or on Linux if you prefer ~/zen-loading-bar:
+   # git clone git@github.com:lassestilvang/zen-loading-bar.git ~/zen-loading-bar
    cd ~/Sites/zen-loading-bar
    ./install.sh
    ```
-3. Restart Zen Browser (`Cmd+Q` and reopen).
+   *Note: On Linux, `install.sh` automatically detects native packages, Flatpak (`app.zen_browser.zen`), and Snap installations. If you use a custom directory, you can also pass it explicitly: `./install.sh /path/to/profile`.*
+
+3. **Restart Zen Browser**:
+   - macOS: `Cmd + Q`, then reopen.
+   - Linux: `Ctrl + Q` (or close all Zen windows), then reopen.
