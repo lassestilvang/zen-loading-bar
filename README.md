@@ -22,23 +22,32 @@ Files:
 
 Because the files in this directory are directly symlinked to your Zen profile, **any edits you make to `ZenLoadingBar.css` or `userChrome.css` here take effect immediately upon restarting Zen (Cmd+Q and reopen)**!
 
-### 1. Adjusting Colors
-Open [`ZenLoadingBar.css`](ZenLoadingBar.css) and look at the `:root` variables at the top:
+### 1. Adjusting Colors & Visibility
+Open [`ZenLoadingBar.css`](ZenLoadingBar.css) and look at the `:root` variables:
 ```css
 :root {
-  /* Progress bar gradient colors */
-  --progress-from:  #4c1d95;  /* Deep Purple */
-  --progress-via-1: #7c3aed;  /* Bright Violet */
-  --progress-via-2: #a855f7;  /* Purple Accent */
+  /* Top progress bar gradient colors */
+  --progress-from:  #4c1d95;  /* Deep purple */
+  --progress-via-1: #7c3aed;  /* Bright violet */
+  --progress-via-2: #a855f7;  /* Purple accent */
   --progress-to:    #ec4899;  /* Pink */
 
-  /* Muted tab indicator gradient */
-  --muted-from: #dc2626;      /* Red */
-  --muted-to:   #f97316;      /* Orange */
+  /* Tab background progress fill colors */
+  --tab-fill-active-from: rgba(124, 58, 237, 0.55); /* Active tab start */
+  --tab-fill-active-to:   rgba(236, 72, 153, 0.45); /* Active tab end */
+  --tab-fill-bg-from:     rgba(124, 58, 237, 0.40); /* Background tab start */
+  --tab-fill-bg-to:       rgba(236, 72, 153, 0.30); /* Background tab end */
 
-  /* Tab background fill (inside tab bar) */
-  --tab-fill-from: rgba(255, 255, 255, 0.15);
-  --tab-fill-to:   rgba(255, 255, 255, 0.05);
+  /* Tab progress glowing edge & bottom line */
+  --tab-fill-edge:        #ec4899;                  /* Sharp edge line */
+  --tab-fill-edge-glow:   rgba(236, 72, 153, 0.8);  /* Glow effect */
+
+  /* Muted tab indicator colors */
+  --muted-from:           #dc2626;  /* Red */
+  --muted-to:             #f97316;  /* Orange */
+  --tab-muted-bg:         linear-gradient(90deg, rgba(220, 38, 38, 0.28), rgba(249, 115, 22, 0.16));
+  --tab-muted-border:     rgba(239, 68, 68, 0.75);
+  --tab-muted-glow:       rgba(220, 38, 38, 0.40);
 }
 ```
 You can change these to match your Zen theme (e.g., cyan/blue, sunset, green, monochrome, or Zen's native accent colors using `var(--zen-primary-color)`).
