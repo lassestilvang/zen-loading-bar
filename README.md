@@ -1,20 +1,22 @@
-# Zen Browser Mods
+# Zen Loading Bar
 
-Personal modifications and stylesheets for [Zen Browser](https://zen-browser.app/) on macOS.
+A vibrant, mobile-style loading indicator and tab status theme for [Zen Browser](https://zen-browser.app/) on macOS and Linux.
+
+![Zen Loading Bar Preview](preview.png)
 
 ---
 
-## 🚀 Installed Mods
+## ✨ Features
 
-### 1. Zen Loading Bar
-Based on [shariarratul/ZenLoadingBar](https://github.com/shariarratul/ZenLoadingBar).
 - **Top Screen Progress Bar**: Shows a sleek gradient progress bar along the top edge of the browser while the active page is loading.
-- **Tab Background Fill**: Subtly fills the background of the loading tab in the sidebar as content loads.
-- **Muted Tab Indicator**: Displays an orange/red indicator across the top when the selected tab is muted.
+- **Active & Background Tab Progress**: A high-visibility purple-to-pink gradient with a glowing leading edge that animates inside the tab as content loads.
+- **Sidebar Muted Tab Indicator**: Highlights muted tabs with an orange/red border accent, soft background glow, and illuminated speaker icon.
+- **Zero Config Symlinking**: Edits made in this repo apply automatically to your Zen profiles upon browser restart.
 
-Files:
+### Files
 - [`ZenLoadingBar.css`](ZenLoadingBar.css): Contains the core styles, CSS variables, and layout rules.
 - [`userChrome.css`](userChrome.css): Root entrypoint loaded by Zen Browser (imports `ZenLoadingBar.css`).
+- [`install.sh`](install.sh): Cross-platform setup script for macOS and Linux.
 
 ---
 
