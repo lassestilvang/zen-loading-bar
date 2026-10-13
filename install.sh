@@ -5,7 +5,7 @@
 # and enables custom stylesheet support in user.js.
 # ==============================================================================
 
-set -euo pipefail
+set -eo pipefail
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 OS="$(uname -s)"
@@ -53,38 +53,42 @@ add_profile() {
   local p="$1"
   local real_p
   real_p="$(cd "$p" 2>/dev/null && pwd || echo "$p")"
-  for seen in "${SEEN_PATHS[@]}"; do
-    if [ "$seen" = "$real_p" ]; then
-      return 0
-    fi
-  done
+  if [ ${#SEEN_PATHS[@]} -gt 0 ]; then
+    for seen in "${SEEN_PATHS[@]}"; do
+      if [ "$seen" = "$real_p" ]; then
+        return 0
+      fi
+    done
+  fi
   SEEN_PATHS+=("$real_p")
   PROFILES+=("$p")
 }
 
-for root in "${CANDIDATE_ROOTS[@]}"; do
-  [ -d "$root" ] || continue
+if [ ${#CANDIDATE_ROOTS[@]} -gt 0 ]; then
+  for root in "${CANDIDATE_ROOTS[@]}"; do
+    [ -d "$root" ] || continue
 
-  # Case A: The root itself is a profile directory
-  if is_profile_dir "$root"; then
-    add_profile "$root"
-    continue
-  fi
-
-  # Case B: The root contains profile subdirectories
-  for p in "$root"/*; do
-    [ -d "$p" ] || continue
-    bname="$(basename "$p")"
-
-    # Match typical profile names or profiles containing markers
-    if [[ "$bname" =~ (twilight|release|default|alpha) ]] || is_profile_dir "$p"; then
-      # Ignore cache or non-profile system folders
-      if [[ "$bname" != *"cache"* ]] && [[ "$bname" != "Crash Reports" ]] && [[ "$bname" != "Pending Pings" ]]; then
-        add_profile "$p"
-      fi
+    # Case A: The root itself is a profile directory
+    if is_profile_dir "$root"; then
+      add_profile "$root"
+      continue
     fi
+
+    # Case B: The root contains profile subdirectories
+    for p in "$root"/*; do
+      [ -d "$p" ] || continue
+      bname="$(basename "$p")"
+
+      # Match typical profile names or profiles containing markers
+      if [[ "$bname" =~ (twilight|release|default|alpha) ]] || is_profile_dir "$p"; then
+        # Ignore cache or non-profile system folders
+        if [[ "$bname" != *"cache"* ]] && [[ "$bname" != "Crash Reports" ]] && [[ "$bname" != "Pending Pings" ]]; then
+          add_profile "$p"
+        fi
+      fi
+    done
   done
-done
+fi
 
 if [ ${#PROFILES[@]} -eq 0 ]; then
   echo "❌ No Zen profiles could be found automatically."
