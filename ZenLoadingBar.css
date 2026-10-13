@@ -1,19 +1,43 @@
 @-moz-document url-prefix("chrome:") {
   :root {
-    /* Progress bar gradient colors */
-    --progress-from:  #4c1d95;
-    --progress-via-1: #7c3aed;
-    --progress-via-2: #a855f7;
-    --progress-to:    #ec4899;
+    /* ==========================================================================
+       Colors & Theme Variables
+       ========================================================================== */
 
-    /* Muted tab gradient colors */
-    --muted-from: #dc2626;
-    --muted-to:   #f97316;
+    /* Top progress bar gradient colors */
+    --progress-from:  #4c1d95;  /* Deep purple */
+    --progress-via-1: #7c3aed;  /* Bright violet */
+    --progress-via-2: #a855f7;  /* Purple accent */
+    --progress-to:    #ec4899;  /* Pink */
 
-    /* Tab background fill colors */
-    --tab-fill-from: rgba(255, 255, 255, 0.15);
-    --tab-fill-to:   rgba(255, 255, 255, 0.05);
+    /* Tab background progress fill colors */
+    /* Active tab loading fill */
+    --tab-fill-active-from: rgba(124, 58, 237, 0.55);
+    --tab-fill-active-to:   rgba(236, 72, 153, 0.45);
+
+    /* Background tab loading fill */
+    --tab-fill-bg-from:     rgba(124, 58, 237, 0.40);
+    --tab-fill-bg-to:       rgba(236, 72, 153, 0.30);
+
+    /* Tab progress glowing edge & bottom accent */
+    --tab-fill-edge:        #ec4899;
+    --tab-fill-edge-glow:   rgba(236, 72, 153, 0.8);
+
+    /* Muted tab indicator colors */
+    --muted-from:           #dc2626;  /* Red */
+    --muted-to:             #f97316;  /* Orange */
+    --tab-muted-bg:         linear-gradient(90deg, rgba(220, 38, 38, 0.28), rgba(249, 115, 22, 0.16));
+    --tab-muted-border:     rgba(239, 68, 68, 0.75);
+    --tab-muted-glow:       rgba(220, 38, 38, 0.40);
+
+    /* Default top bar variables */
+    --bar-colour: transparent;
+    --bar-pcent: 0%;
   }
+
+  /* ==========================================================================
+     1. Top Screen Progress Bar
+     ========================================================================== */
 
   .browserSidebarContainer.deck-selected::before {
     content: "" !important;
@@ -27,7 +51,7 @@
     filter: drop-shadow(0px 0px 10px rgba(139, 92, 246, 0.8)) !important;
     border-radius: 0 3px 3px 0 !important;
     z-index: 1 !important;
-    transition: width 0.5s ease-in-out, top 0.1s ease-in-out, background 0.2s ease !important;
+    transition: width 0.5s ease-in-out, top 0.1s ease-in-out, background 0.2s ease, opacity 0.3s ease !important;
   }
 
   @media not (-moz-bool-pref: "zen.view.compact.hide-toolbar") and not (-moz-bool-pref: "zen.view.use-single-toolbar") {
@@ -74,27 +98,56 @@
     }
   }
 
-  /* Tab background progress fill */
+  /* ==========================================================================
+     2. Tab Loading Indicator (Active & Background Tabs in Sidebar)
+     ========================================================================== */
+
   .tabbrowser-tab .tab-content {
     position: relative !important;
+    border-radius: var(--zen-border-radius, 8px) !important;
+    overflow: hidden !important;
   }
+
+  /* Ensure all tab content (icon, label, mute button, close button) stays above the progress fill */
+  .tabbrowser-tab .tab-content > * {
+    position: relative !important;
+    z-index: 2 !important;
+  }
+
   .tabbrowser-tab .tab-content::before {
     content: "" !important;
     position: absolute !important;
     top: 0 !important;
     left: 0 !important;
     height: 100% !important;
-    width: 100% !important;
+    width: 0% !important;
     opacity: 0 !important;
-    background: linear-gradient(90deg, var(--tab-fill-from), var(--tab-fill-to)) !important;
-    border-radius: 4px !important;
-    z-index: 0 !important;
+    border-radius: inherit !important;
+    border-right: 0px solid transparent !important;
+    border-bottom: 0px solid transparent !important;
+    box-shadow: none !important;
+    z-index: 1 !important;
     pointer-events: none !important;
-    transition: width 0.2s ease-out, opacity 0.4s ease 0.2s !important;
+    transition: width 0.2s ease-out, opacity 0.4s ease 0.15s !important;
   }
+
+  /* Progress fill colors: Active tab */
+  .tabbrowser-tab[selected][busy] .tab-content::before {
+    background: linear-gradient(90deg, var(--tab-fill-active-from), var(--tab-fill-active-to)) !important;
+  }
+
+  /* Progress fill colors: Background tab */
+  .tabbrowser-tab:not([selected])[busy] .tab-content::before {
+    background: linear-gradient(90deg, var(--tab-fill-bg-from), var(--tab-fill-bg-to)) !important;
+  }
+
+  /* Loading steps & glowing edge indicator */
   .tabbrowser-tab[busy] .tab-content::before {
     opacity: 1 !important;
     width: 15% !important;
+    border-right: 2px solid var(--tab-fill-edge) !important;
+    border-bottom: 2px solid var(--tab-fill-edge) !important;
+    box-shadow: 2px 0 10px var(--tab-fill-edge-glow) !important;
     transition: width 0.5s ease-in-out, opacity 0.1s ease !important;
   }
   .tabbrowser-tab[busy][pendingicon] .tab-content::before {
@@ -113,9 +166,36 @@
     transition: width 0.5s ease-in-out, opacity 0.1s ease !important;
   }
 
-  /* Keep close button above the fill */
+  /* Keep close button interactive and positioned */
   .tabbrowser-tab .tab-close-button {
     position: relative !important;
-    z-index: 1 !important;
+    z-index: 3 !important;
+  }
+
+  /* ==========================================================================
+     3. Muted Tab Sidebar Highlight (Active & Background Tabs)
+     ========================================================================== */
+
+  /* Highlight any muted tab in the sidebar with a warm red/orange tint & border */
+  .tabbrowser-tab[muted] .tab-content {
+    background: var(--tab-muted-bg) !important;
+    box-shadow: inset 3.5px 0 0 var(--muted-from), 0 0 8px var(--tab-muted-glow) !important;
+    outline: 1.5px solid var(--tab-muted-border) !important;
+    outline-offset: -1px !important;
+    border-radius: var(--zen-border-radius, 8px) !important;
+  }
+
+  /* Active muted tab: slightly stronger background and glow */
+  .tabbrowser-tab[muted][selected] .tab-content {
+    background: linear-gradient(90deg, rgba(220, 38, 38, 0.38), rgba(249, 115, 22, 0.22)) !important;
+    box-shadow: inset 4px 0 0 var(--muted-from), 0 0 12px var(--tab-muted-glow) !important;
+    outline: 1.5px solid var(--muted-from) !important;
+  }
+
+  /* Emphasize the mute/audio icon */
+  .tabbrowser-tab[muted] :is(.tab-icon-overlay, .tab-audio-button, .tab-icon-sound) {
+    fill: var(--muted-to) !important;
+    color: var(--muted-to) !important;
+    filter: drop-shadow(0 0 4px rgba(249, 115, 22, 0.7)) !important;
   }
 }
